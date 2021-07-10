@@ -137,7 +137,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  
 --- a/drivers/net/can/c_can/c_can.c
 +++ b/drivers/net/can/c_can/c_can.c
-@@ -1105,7 +1105,7 @@ static int c_can_poll(struct napi_struct
+@@ -1093,7 +1093,7 @@ static int c_can_poll(struct napi_struct
  
  end:
  	if (work_done < quota) {
@@ -148,7 +148,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  			c_can_irq_control(priv, true);
 --- a/drivers/net/can/flexcan.c
 +++ b/drivers/net/can/flexcan.c
-@@ -703,7 +703,7 @@ static int flexcan_poll(struct napi_stru
+@@ -709,7 +709,7 @@ static int flexcan_poll(struct napi_stru
  		work_done += flexcan_poll_bus_err(dev, reg_esr);
  
  	if (work_done < quota) {
@@ -181,7 +181,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -730,7 +730,7 @@ static int m_can_poll(struct napi_struct
+@@ -727,7 +727,7 @@ static int m_can_poll(struct napi_struct
  		work_done += m_can_do_rx_poll(dev, (quota - work_done));
  
  	if (work_done < quota) {
@@ -637,7 +637,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		return received;
 --- a/drivers/net/ethernet/freescale/gianfar.c
 +++ b/drivers/net/ethernet/freescale/gianfar.c
-@@ -3195,7 +3195,7 @@ static int gfar_poll_rx_sq(struct napi_s
+@@ -3199,7 +3199,7 @@ static int gfar_poll_rx_sq(struct napi_s
  
  	if (work_done < budget) {
  		u32 imask;
@@ -646,7 +646,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		/* Clear the halt bit in RSTAT */
  		gfar_write(&regs->rstat, gfargrp->rstat);
  
-@@ -3284,7 +3284,7 @@ static int gfar_poll_rx(struct napi_stru
+@@ -3288,7 +3288,7 @@ static int gfar_poll_rx(struct napi_stru
  
  	if (!num_act_queues) {
  		u32 imask;
@@ -712,7 +712,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		 * then check once more to make sure we are done.
 --- a/drivers/net/ethernet/ibm/ibmvnic.c
 +++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -1028,7 +1028,7 @@ restart_poll:
+@@ -1034,7 +1034,7 @@ restart_poll:
  
  	if (frames_processed < budget) {
  		enable_scrq_irq(adapter, adapter->rx_scrq[scrq_num]);
@@ -949,7 +949,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  
 --- a/drivers/net/ethernet/pasemi/pasemi_mac.c
 +++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
-@@ -1575,7 +1575,7 @@ static int pasemi_mac_poll(struct napi_s
+@@ -1579,7 +1579,7 @@ static int pasemi_mac_poll(struct napi_s
  	pkts = pasemi_mac_clean_rx(rx_ring(mac), budget);
  	if (pkts < budget) {
  		/* all done, no more packets present */
@@ -960,7 +960,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		pasemi_mac_restart_tx_intr(mac);
 --- a/drivers/net/ethernet/qlogic/netxen/netxen_nic_main.c
 +++ b/drivers/net/ethernet/qlogic/netxen/netxen_nic_main.c
-@@ -2391,7 +2391,7 @@ static int netxen_nic_poll(struct napi_s
+@@ -2386,7 +2386,7 @@ static int netxen_nic_poll(struct napi_s
  		work_done = budget;
  
  	if (work_done < budget) {
@@ -1095,7 +1095,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		dma_intr_ena = smsc9420_reg_read(pd, DMAC_INTR_ENA);
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2702,7 +2702,7 @@ static int stmmac_poll(struct napi_struc
+@@ -2704,7 +2704,7 @@ static int stmmac_poll(struct napi_struc
  
  	work_done = stmmac_rx(priv, budget);
  	if (work_done < budget) {
@@ -1324,7 +1324,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  	return rxd_done;
 --- a/drivers/net/wan/fsl_ucc_hdlc.c
 +++ b/drivers/net/wan/fsl_ucc_hdlc.c
-@@ -578,7 +578,7 @@ static int ucc_hdlc_poll(struct napi_str
+@@ -582,7 +582,7 @@ static int ucc_hdlc_poll(struct napi_str
  	howmany += hdlc_rx_done(priv, budget - howmany);
  
  	if (howmany < budget) {
@@ -1368,7 +1368,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  	}
 --- a/drivers/net/xen-netback/interface.c
 +++ b/drivers/net/xen-netback/interface.c
-@@ -104,7 +104,7 @@ static int xenvif_poll(struct napi_struc
+@@ -120,7 +120,7 @@ static int xenvif_poll(struct napi_struc
  	work_done = xenvif_tx_action(queue, budget);
  
  	if (work_done < budget) {

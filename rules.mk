@@ -1,10 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Copyright (C) 2006-2010 OpenWrt.org
 # Copyright (C) 2016 LEDE Project
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
 
 ifneq ($(__rules_inc),1)
 __rules_inc=1
@@ -76,13 +73,13 @@ IS_PACKAGE_BUILD := $(if $(filter package/%,$(BUILD_SUBDIR)),1)
 
 OPTIMIZE_FOR_CPU=$(subst i386,i486,$(ARCH))
 
-ifeq ($(ARCH),powerpc)
-  FPIC:=-fPIC
+ifneq (,$(findstring $(ARCH) , aarch64 aarch64_be powerpc ))
+  FPIC:=-DPIC -fPIC
 else
-  FPIC:=-fpic
+  FPIC:=-DPIC -fpic
 endif
 
-HOST_FPIC:=-fPIC
+HOST_FPIC:=-DPIC -fPIC
 
 ARCH_SUFFIX:=$(call qstrip,$(CONFIG_CPU_TYPE))
 GCC_ARCH:=
@@ -338,6 +335,12 @@ else
     $(SCRIPT_DIR)/rstrip.sh
 endif
 
+NINJA = \
+	MAKEFLAGS="$(MAKE_JOBSERVER)" \
+	$(STAGING_DIR_HOST)/bin/ninja \
+		$(if $(findstring c,$(OPENWRT_VERBOSE)),-v) \
+		$(if $(MAKE_JOBSERVER),,-j1)
+
 ifeq ($(CONFIG_IPV6),y)
   DISABLE_IPV6:=
 else
@@ -403,6 +406,34 @@ endef
 
 # file extension
 ext=$(word $(words $(subst ., ,$(1))),$(subst ., ,$(1)))
+
+# Count Git commits of a package
+# $(1) => if non-empty: count commits since last ": [uU]pdate to " or ": [bB]ump to " in commit message
+define commitcount
+$(shell \
+  if git log -1 >/dev/null 2>/dev/null; then \
+    if [ -n "$(1)" ]; then \
+      last_bump="$$(git log --pretty=format:'%h %s' . | \
+        grep --max-count=1 -e ': [uU]pdate to ' -e ': [bB]ump to ' | \
+        cut -f 1 -d ' ')"; \
+    fi; \
+    if [ -n "$$last_bump" ]; then \
+      echo -n $$(($$(git rev-list --count "$$last_bump..HEAD" .) + 1)); \
+    else \
+      git rev-list --count HEAD .; \
+    fi; \
+  else \
+    secs="$$(($(SOURCE_DATE_EPOCH) % 86400))"; \
+    date="$$(date --utc --date="@$(SOURCE_DATE_EPOCH)" "+%y%m%d")"; \
+    printf '%s.%05d' "$$date" "$$secs"; \
+  fi; \
+)
+endef
+
+abi_version_str = $(subst -,,$(subst _,,$(subst .,,$(1))))
+
+COMMITCOUNT = $(if $(DUMP),0,$(call commitcount))
+AUTORELEASE = $(if $(DUMP),0,$(call commitcount,1))
 
 all:
 FORCE: ;

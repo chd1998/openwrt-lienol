@@ -1,9 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
-# Copyright (C) 2007-2012 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
+# Copyright (C) 2007-2020 OpenWrt.org
 
 autoconf_bool = $(patsubst %,$(if $($(1)),--enable,--disable)-%,$(2))
 
@@ -87,7 +84,7 @@ endef
 
 define gettext_version_target
 	(cd $(PKG_BUILD_DIR) && \
-		GETTEXT_VERSION=$(shell $(STAGING_DIR_HOSTPKG)/bin/gettext -V | $(STAGING_DIR_HOST)/bin/sed -ne '1s/.*\([0-9]\.[0-9]\{2\}\.[0-9]\).*/\1/p' ) && \
+		GETTEXT_VERSION=$(shell $(STAGING_DIR_HOSTPKG)/bin/gettext -V | $(STAGING_DIR_HOST)/bin/sed -rne '1s/.*\b([0-9]\.[0-9]+(\.[0-9]+)?)\b.*/\1/p' ) && \
 		$(STAGING_DIR_HOST)/bin/sed \
 			-i $(PKG_BUILD_DIR)/configure.ac \
 			-e "s/AM_GNU_GETTEXT_VERSION(.*)/AM_GNU_GETTEXT_VERSION(\[$$$$GETTEXT_VERSION\])/g" && \

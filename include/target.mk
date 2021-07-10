@@ -1,10 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Copyright (C) 2007-2008 OpenWrt.org
 # Copyright (C) 2016 LEDE Project
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
 
 ifneq ($(__target_inc),1)
 __target_inc=1
@@ -14,8 +11,9 @@ DEVICE_TYPE?=router
 
 # Default packages - the really basic set
 DEFAULT_PACKAGES:=base-files libc libgcc busybox dropbear mtd uci opkg netifd fstools uclient-fetch logd urandom-seed urngd luci luci-compat wget-ssl curl \
-default-settings luci-app-wol luci-app-vlmcsd luci-app-ramfree \
-luci-app-ddns ddns-scripts_aliyun ddns-scripts_dnspod \
+default-settings \
+luci-app-ddns ddns-scripts-cloudflare ddns-scripts_aliyun ddns-scripts_dnspod \
+luci-app-upnp luci-app-wol luci-app-vlmcsd luci-app-ramfree \
 luci-app-timecontrol luci-app-control-timewol luci-app-control-webrestriction luci-app-control-weburl
 # For nas targets
 DEFAULT_PACKAGES.nas:=block-mount fdisk lsblk mdadm
