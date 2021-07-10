@@ -28,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 ifeq ($(DUMP),)
   -include $(LINUX_DIR)/.config
   include $(INCLUDE_DIR)/netfilter.mk
-  STAMP_CONFIGURED:=$(strip $(STAMP_CONFIGURED))_$(shell grep 'NETFILTER' $(LINUX_DIR)/.config | mkhash md5)
+  STAMP_CONFIGURED:=$(strip $(STAMP_CONFIGURED))_$(shell grep 'NETFILTER' $(LINUX_DIR)/.config | $(MKHASH) md5)
 endif
 
 
@@ -657,6 +657,10 @@ define BuildPlugin
   $$(eval $$(call BuildPackage,$(1)))
 endef
 
+$(eval $(call BuildPackage,libxtables))
+$(eval $(call BuildPackage,libxtables-nft))
+$(eval $(call BuildPackage,libip4tc))
+$(eval $(call BuildPackage,libip6tc))
 $(eval $(call BuildPackage,iptables))
 $(eval $(call BuildPackage,iptables-nft))
 $(eval $(call BuildPlugin,iptables-mod-conntrack-extra,$(IPT_CONNTRACK_EXTRA-m)))
@@ -685,7 +689,4 @@ $(eval $(call BuildPackage,ip6tables))
 $(eval $(call BuildPackage,ip6tables-nft))
 $(eval $(call BuildPlugin,ip6tables-extra,$(IPT_IPV6_EXTRA-m)))
 $(eval $(call BuildPlugin,ip6tables-mod-nat,$(IPT_NAT6-m)))
-$(eval $(call BuildPackage,libip4tc))
-$(eval $(call BuildPackage,libip6tc))
-$(eval $(call BuildPackage,libxtables))
-$(eval $(call BuildPackage,libxtables-nft))
+

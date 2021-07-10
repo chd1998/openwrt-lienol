@@ -1,9 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Copyright (C) 2009-2013 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
@@ -69,6 +66,13 @@ define Device/cloudengines_pogoplugv4
 	kmod-gpio-button-hotplug
 endef
 TARGET_DEVICES += cloudengines_pogoplugv4
+
+define Device/globalscale_sheevaplug
+  DEVICE_VENDOR := Globalscale
+  DEVICE_MODEL := Sheevaplug
+  DEVICE_PACKAGES := kmod-mvsdio
+endef
+TARGET_DEVICES += globalscale_sheevaplug
 
 define Device/iom_iconnect-1.1
   DEVICE_VENDOR := Iomega

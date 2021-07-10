@@ -1,10 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
 # Copyright (C) 2007-2008 OpenWrt.org
 # Copyright (C) 2016 LEDE Project
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
 
 ifneq ($(__target_inc),1)
 __target_inc=1
@@ -29,8 +26,9 @@ DEFAULT_PACKAGES:=\
 	uclient-fetch \
 	urandom-seed \
 	luci luci-compat wget-ssl curl \
-	default-settings luci-app-wol luci-app-vlmcsd luci-app-ramfree \
-	luci-app-ddns ddns-scripts_aliyun ddns-scripts_dnspod \
+	default-settings luci-app-upnp luci-app-wol luci-app-vlmcsd luci-app-ramfree \
+	luci-app-ddns ddns-scripts-cloudflare ddns-scripts_aliyun ddns-scripts_dnspod \
+	luci-app-timecontrol luci-app-control-timewol luci-app-control-webrestriction luci-app-control-weburl \
 	urngd
 
 ifneq ($(CONFIG_SELINUX),)
